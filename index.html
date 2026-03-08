@@ -568,43 +568,25 @@
             });
 
             // ==================== TOMBOL BUKA MOBILE LEGENDS ====================
-            document.getElementById('openMlBtn').addEventListener('click', function() {
-                addLog('📱 Mencoba membuka Mobile Legends...', 'fa-gamepad');
+            document.getElementById('openMlBtn').addEventListener('click', function () {
+    addLog('📱 Membuka Mobile Legends...', 'fa-gamepad');
 
-                // Coba buka intent ML (khusus hp android)
-                const mlPackage = 'com.mobile.legends';  // package name MLBB
+    const appUrl = "mobilelegends://"; 
+    const playStore = "https://play.google.com/store/apps/details?id=com.mobile.legends";
 
-                // Buat link intent
-                const intentUrl = `intent://${mlPackage}#Intent;scheme=package;end`;
+    // coba buka aplikasi
+    window.location.href = appUrl;
 
-                // Buat link fallback ke play store jika ML tidak terinstall
-                const fallbackUrl = `https://play.google.com/store/apps/details?id=${mlPackage}`;
-
-                // Coba redirect ke intent (hanya berhasil di HP)
-                window.location.href = intentUrl;
-
-                // Jika dalam 2 detik tidak berhasil (masih di halaman ini), kasih opsi buka play store
-                setTimeout(() => {
-                    addLog('⚠️ Jika ML tidak terbuka, klik link manual:', 'fa-link');
-                    addLog(`🔗 ${fallbackUrl}`, 'fa-arrow-up-right-from-square');
-                    
-                    // Buat link kecil yang bisa diklik
-                    const manualLink = document.createElement('div');
-                    manualLink.className = 'log-entry';
-                    manualLink.style.cursor = 'pointer';
-                    manualLink.style.color = '#80d4ff';
-                    manualLink.innerHTML = '<i class="fas fa-download"></i> KLIK UNTUK BUKA PLAY STORE';
-                    manualLink.addEventListener('click', () => {
-                        window.open(fallbackUrl, '_blank');
-                    });
-                    logConsole.appendChild(manualLink);
-                }, 1500);
-            });
+    // jika tidak ada aplikasinya → buka playstore
+    setTimeout(() => {
+        window.location.href = playStore;
+    }, 1500);
+});
 
             // ==================== TAMBAHAN: EFEK DOUBLE KLIK LOGO ====================
             document.querySelector('.logo-faz').addEventListener('dblclick', function() {
-                addLog('👑 FAZ STORE PRANK EDITION • SPECIAL', 'fa-crown');
-                addLog('💀 Fitur RW 100% palsu, tapi keren buat prank!', 'fa-face-laugh-wink');
+                addLog('👑 FAZ STORE EDITION • SPECIAL', 'fa-crown');
+                addLog('💀 Fitur RW 100%, tapi keren', 'fa-face-laugh-wink');
             });
 
             // Inisialisasi: pilih beberapa fitur default biar langsung ada isi (opsional)
