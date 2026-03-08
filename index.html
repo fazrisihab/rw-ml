@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RW FREE • FAZ STORE V1.6</title>
+    <!-- Font Awesome 6 (Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #0a1a2b 0%, #0b2b40 100%);
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Background pattern (grid halus) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(0, 191, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 191, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 480px;
+            width: 100%;
+            background: rgba(8, 28, 45, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(64, 224, 255, 0.25);
+            border-radius: 48px;
+            padding: 24px 20px;
+            box-shadow: 0 25px 50px -8px rgba(0,0,0,0.8), 0 0 0 1px rgba(0, 255, 255, 0.2) inset;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header dengan logo FAZ STORE */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            background: rgba(0, 30, 50, 0.6);
+            padding: 12px 20px;
+            border-radius: 60px;
+            border: 1px solid #00b7ff60;
+            box-shadow: 0 5px 15px rgba(0,191,255,0.2);
+        }
+
+        .title-left h1 {
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+            text-shadow: 0 2px 5px #00b7ff;
+        }
+
+        .title-left .version {
+            color: #7ad0ff;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .logo-faz {
+            background: linear-gradient(145deg, #0066cc, #0099ff);
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            border: 2px solid #7ad0ff;
+            box-shadow: 0 0 20px #00ccff;
+            text-shadow: 2px 2px 0 #003366;
+        }
+
+        /* Panel status - biru tua */
+        .status-bar {
+            background: #04273b;
+            border-radius: 30px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #00a6ff;
+            box-shadow: inset 0 2px 5px #00000055, 0 5px 0 #00263b;
+        }
+
+        .status-left .stat-label {
+            color: #9fc9ff;
+            font-size: 0.8rem;
+        }
+
+        .status-left .stat-number {
+            color: white;
+            font-weight: 700;
+            font-size: 1.6rem;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-online {
+            background: #00d9ff;
+            padding: 6px 16px;
+            border-radius: 40px;
+            color: #001f33;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: 1px solid white;
+            box-shadow: 0 0 10px cyan;
+        }
+
+        /* Grid fitur (gaya chip) */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 25px 0 20px;
+        }
+
+        .feature-chip {
+            background: #0a2e42;
+            border: 1.5px solid #2b9bcb;
+            border-radius: 40px;
+            padding: 14px 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.15s;
+            box-shadow: 0 4px 0 #00263e;
+        }
+
+        .feature-chip.selected {
+            background: #005f8c;
+            border-color: #80e2ff;
+            box-shadow: 0 0 15px #00b3ff, 0 4px 0 #003153;
+            transform: scale(1.02);
+        }
+
+        .feature-chip i {
+            font-size: 1.5rem;
+            min-width: 32px;
+            text-align: center;
+            color: #a0dbff;
+        }
+
+        .feature-chip.selected i {
+            color: white;
+            text-shadow: 0 0 10px white;
+        }
+
+        .feature-chip .chip-text {
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            line-height: 1.2;
+        }
+
+        .feature-chip.selected .chip-text {
+            color: white;
+            font-weight: 700;
+        }
+
+        /* Container tombol utama */
+        .action-area {
+            background: #022236;
+            border-radius: 40px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #2499d4;
+        }
+
+        .selected-preview {
+            color: #a3d8ff;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        #selectedFeatures {
+            color: white;
+            font-weight: 600;
+            background: #003055;
+            padding: 5px 15px;
+            border-radius: 40px;
+            display: inline-block;
+        }
+
+        /* Tombol JALANKAN / STOP */
+        .run-btn {
+            width: 100%;
+            background: linear-gradient(145deg, #0077be, #003f6f);
+            border: none;
+            border-radius: 60px;
+            padding: 22px 0;
+            color: white;
+            font-weight: 800;
+            font-size: 2rem;
+            letter-spacing: 3px;
+            text-shadow: 0 2px 5px black;
+            box-shadow: 0 10px 0 #001d30, 0 0 25px #0099ff;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: 0.05s linear;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .run-btn.stop-mode {
+            background: linear-gradient(145deg, #cc3300, #8b1e00);
+            box-shadow: 0 10px 0 #4a1a00, 0 0 30px #ff6600;
+        }
+
+        .run-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 4px 0 #001d30, 0 0 25px #0099ff;
+        }
+
+        .run-btn.stop-mode:active {
+            transform: translateY(6px);
+            box-shadow: 0 4px 0 #4a1a00, 0 0 30px #ff6600;
+        }
+
+        /* Log console (hacker style) */
+        .hacker-log {
+            background: #001220;
+            border-radius: 28px;
+            padding: 16px;
+            margin: 20px 0;
+            border: 1px solid #00b3ff;
+            min-height: 130px;
+            max-height: 180px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            box-shadow: inset 0 0 20px #00000099;
+            scrollbar-width: thin;
+            scrollbar-color: #00a6ff #001a2b;
+        }
+
+        .log-entry {
+            color: #7ad0ff;
+            font-size: 0.8rem;
+            margin: 6px 0;
+            border-bottom: 1px dashed #1b4f6e;
+            padding-bottom: 3px;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .log-entry i {
+            color: #45d6ff;
+            width: 18px;
+        }
+
+        /* Tombol buka ML */
+        .ml-button {
+            width: 100%;
+            background: #005f8c;
+            border: 2px solid #80d4ff;
+            border-radius: 50px;
+            padding: 18px 0;
+            color: white;
+            font-weight: 700;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            margin: 8px 0 5px;
+            transition: 0.15s;
+            box-shadow: 0 5px 0 #003555;
+        }
+
+        .ml-button:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #003555;
+        }
+
+        .ml-button i {
+            font-size: 1.6rem;
+            filter: drop-shadow(0 0 5px cyan);
+        }
+
+        .footer-remark {
+            text-align: center;
+            color: #5f9ac0;
+            font-size: 0.65rem;
+            margin-top: 15px;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER: RW FREE BY FAZ STORE V1.6 + LOGO -->
+        <div class="header">
+            <div class="title-left">
+                <h1>RW FREE <span style="color:#87cefa;">BY FAZ STORE</span></h1>
+                <div class="version"><i class="fas fa-code-branch"></i> V1.6 • PRIVATE SERVER • DARK SYSTEM</div>
+            </div>
+            <div class="logo-faz">
+                <i class="fas fa-crown"></i>
+            </div>
+        </div>
+
+        <!-- Status bar (biru) -->
+        <div class="status-bar">
+            <div class="status-left">
+                <div class="stat-label">ROOM WANGI STATUS</div>
+                <div class="stat-number">
+                    <i class="fas fa-circle" style="color:#00ffaa; font-size: 1rem;"></i> 
+                    <span id="mainStatus">READY</span>
+                </div>
+            </div>
+            <div class="badge-online" id="onlineBadge">
+                <i class="fas fa-bolt"></i> SIAP 24/7
+            </div>
+        </div>
+
+        <!-- Grid fitur pilihan (bisa multi select) -->
+        <div class="features-grid" id="featureGrid">
+            <!-- Fitur akan di-generate oleh JS biar rapi, tapi saya tulis manual sekalian biar mudah dilihat -->
+        </div>
+
+        <!-- Area aksi: preview fitur dipilih + tombol jalankan/stop -->
+        <div class="action-area">
+            <div class="selected-preview">
+                <i class="fas fa-cog fa-spin" style="color:#56d6ff;"></i> 
+                FITUR DIPILIH: <span id="selectedFeatures">-</span>
+            </div>
+
+            <!-- Tombol utama JALANKAN / STOP -->
+            <button class="run-btn" id="runBtn">
+                <i class="fas fa-play"></i> JALANKAN
+            </button>
+
+            <!-- Log hacker (proses berjalan) -->
+            <div class="hacker-log" id="logConsole">
+                <div class="log-entry"><i class="fas fa-angle-right"></i> RW ENGINE v1.6 INITIALIZED</div>
+                <div class="log-entry"><i class="fas fa-angle-right"></i> WAITING FOR ACTIVATION...</div>
+            </div>
+
+            <!-- Tombol BUKA MOBILE LEGENDS -->
+            <button class="ml-button" id="openMlBtn">
+                <i class="fab fa-android"></i> BUKA MOBILE LEGENDS
+                <i class="fas fa-gamepad"></i>
+            </button>
+        </div>
+
+        <div class="footer-remark">
+            ⚡ DARK SYSTEM • ENCRYPTED TUNNEL • BYPASS 64-BIT ⚡
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ==================== DAFTAR FITUR (bisa ditambah sesuai request + tambahan) ====================
+            const featureList = [
+                { id: 'bugmusuh', icon: 'fa-bug', name: 'BUG MUSUH 100%' },
+                { id: 'botbug', icon: 'fa-robot', name: 'BOT BUG RANK/CLASSIC' },
+                { id: 'suntikkda', icon: 'fa-syringe', name: 'SUNTIK + KDA 99%' },
+                { id: 'suntikwr', icon: 'fa-chart-line', name: 'SUNTIK WR/MMR' },
+                { id: 'pluginserver', icon: 'fa-server', name: 'PLUGIN SERVER' },
+                { id: 'privatefix', icon: 'fa-lock', name: 'PRIVATE My FIX' },
+                { id: 'darksystem', icon: 'fa-moon', name: 'DARK SYSTEM' },
+                // Tambahan fitur biar rame (sesuai selera)
+                { id: 'autowin', icon: 'fa-trophy', name: 'AUTO WIN 100%' },
+                { id: 'antiban', icon: 'fa-shield', name: 'ANTI BAN V3' },
+                { id: 'spinwangi', icon: 'fa-sliders', name: 'SPIN ROOM WANGI' },
+                { id: 'masterrank', icon: 'fa-crown', name: 'MASTER RANK' },
+                { id: 'bypassv', icon: 'fa-code', name: 'BYPASS VANGUARD' },
+                { id: 'fastrespawn', icon: 'fa-clock', name: 'FAST RESPAWN' }
+            ];
+
+            // Render fitur ke dalam grid
+            const grid = document.getElementById('featureGrid');
+            featureList.forEach(f => {
+                const chip = document.createElement('div');
+                chip.className = 'feature-chip';
+                chip.dataset.id = f.id;
+                chip.dataset.name = f.name;
+                chip.innerHTML = `
+                    <i class="fas ${f.icon}"></i>
+                    <span class="chip-text">${f.name}</span>
+                `;
+                grid.appendChild(chip);
+            });
+
+            // ==================== STATE ====================
+            let selectedFeatures = new Set();          // simpan ID fitur yang dipilih
+            let isRunning = false;                     // status proses (JALANKAN / STOP)
+            let logInterval = null;                     // interval buat nambah log palsu
+            const runBtn = document.getElementById('runBtn');
+            const logConsole = document.getElementById('logConsole');
+            const selectedSpan = document.getElementById('selectedFeatures');
+            const mainStatus = document.getElementById('mainStatus');
+            const onlineBadge = document.getElementById('onlineBadge');
+
+            // Helper: update tampilan fitur yang dipilih
+            function updateSelectedDisplay() {
+                const chips = document.querySelectorAll('.feature-chip');
+                chips.forEach(chip => {
+                    const id = chip.dataset.id;
+                    if (selectedFeatures.has(id)) {
+                        chip.classList.add('selected');
+                    } else {
+                        chip.classList.remove('selected');
+                    }
+                });
+
+                // update text preview
+                if (selectedFeatures.size === 0) {
+                    selectedSpan.innerText = '-';
+                } else {
+                    const names = [];
+                    chips.forEach(chip => {
+                        if (selectedFeatures.has(chip.dataset.id)) {
+                            names.push(chip.dataset.name);
+                        }
+                    });
+                    selectedSpan.innerText = names.join(', ');
+                }
+            }
+
+            // Click pada chip feature (toggle select)
+            document.querySelectorAll('.feature-chip').forEach(chip => {
+                chip.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const id = this.dataset.id;
+                    if (selectedFeatures.has(id)) {
+                        selectedFeatures.delete(id);
+                    } else {
+                        selectedFeatures.add(id);
+                    }
+                    updateSelectedDisplay();
+                });
+            });
+
+            // ==================== TAMBAH LOG KE KONSOLE HACKER ====================
+            function addLog(message, icon = 'fa-terminal') {
+                const entry = document.createElement('div');
+                entry.className = 'log-entry';
+                entry.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+                logConsole.appendChild(entry);
+                logConsole.scrollTop = logConsole.scrollHeight;
+                // batasi log maksimal 12 biar gak penuh
+                while (logConsole.children.length > 12) {
+                    logConsole.removeChild(logConsole.children[0]);
+                }
+            }
+
+            // ==================== FUNGSI JALANKAN (mulai proses hacker) ====================
+            function startProcess() {
+                if (selectedFeatures.size === 0) {
+                    addLog('⚠️ Pilih minimal 1 fitur dulu!', 'fa-exclamation-triangle');
+                    return false;
+                }
+                isRunning = true;
+
+                // Ubah tampilan tombol
+                runBtn.classList.add('stop-mode');
+                runBtn.innerHTML = '<i class="fas fa-stop"></i> STOP';
+
+                // Ubah status
+                mainStatus.innerText = 'RUNNING';
+                onlineBadge.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROCESSING';
+
+                // Bersihkan log lama sedikit, kasih effect mulai
+                addLog('🚀 INJECTING ROOM WANGI PAYLOAD...', 'fa-skull');
+                addLog('🔓 FEATURES: ' + selectedSpan.innerText, 'fa-bolt');
+
+                // Simulasi proses nambah log tiap detik (seperti hacker)
+                let step = 0;
+                logInterval = setInterval(() => {
+                    if (!isRunning) return; // safety
+
+                    step++;
+                    const logs = [
+                        { msg: 'Bypassing MLBB anti-cheat...', icon: 'fa-shield-halved' },
+                        { msg: 'Redirecting server to Cambodia (KH)', icon: 'fa-globe' },
+                        { msg: 'Spoofing matchmaking region...', icon: 'fa-map-location-dot' },
+                        { msg: 'Injecting bot detector v3.2', icon: 'fa-robot' },
+                        { msg: 'KDA modifier activated +99%', icon: 'fa-syringe' },
+                        { msg: 'WR/MMR spoofing: 99.9%', icon: 'fa-chart-simple' },
+                        { msg: 'Plugin server: connected', icon: 'fa-server' },
+                        { msg: 'Dark system: bypass vanguard', icon: 'fa-moon' },
+                        { msg: 'Memperdaya sistem matchmaking...', icon: 'fa-face-smirking' },
+                        { msg: 'Mendapatkan room dengan 8 bot', icon: 'fa-check' },
+                        { msg: 'Stabilizing connection...', icon: 'fa-wifi' }
+                    ];
+
+                    if (step <= logs.length) {
+                        addLog(logs[step-1].msg, logs[step-1].icon);
+                    } else {
+                        // looping log tapi beda
+                        const loopMsg = [
+                            '🔄 Maintain room wangi...',
+                            '⚡ Ping 4ms to server',
+                            '✅ All features active',
+                            '🛡️ Anti-ban engine running'
+                        ];
+                        addLog(loopMsg[step % loopMsg.length], 'fa-gear');
+                    }
+                }, 1200);
+
+                return true;
+            }
+
+            // ==================== FUNGSI STOP (menghentikan proses) ====================
+            function stopProcess() {
+                isRunning = false;
+                if (logInterval) {
+                    clearInterval(logInterval);
+                    logInterval = null;
+                }
+
+                runBtn.classList.remove('stop-mode');
+                runBtn.innerHTML = '<i class="fas fa-play"></i> JALANKAN';
+
+                mainStatus.innerText = 'READY';
+                onlineBadge.innerHTML = '<i class="fas fa-bolt"></i> SIAP 24/7';
+
+                addLog('⏸️ Proses dihentikan. Room wangi dinonaktifkan.', 'fa-hand');
+                addLog('🔁 Siap memulai ulang kapan saja.', 'fa-rotate');
+            }
+
+            // ==================== TOMBOL JALANKAN / STOP ====================
+            runBtn.addEventListener('click', function() {
+                if (isRunning) {
+                    stopProcess();
+                } else {
+                    startProcess();
+                }
+            });
+
+            // ==================== TOMBOL BUKA MOBILE LEGENDS ====================
+            document.getElementById('openMlBtn').addEventListener('click', function() {
+                addLog('📱 Mencoba membuka Mobile Legends...', 'fa-gamepad');
+
+                // Coba buka intent ML (khusus hp android)
+                const mlPackage = 'com.mobile.legends';  // package name MLBB
+
+                // Buat link intent
+                const intentUrl = `intent://${mlPackage}#Intent;scheme=package;end`;
+
+                // Buat link fallback ke play store jika ML tidak terinstall
+                const fallbackUrl = `https://play.google.com/store/apps/details?id=${mlPackage}`;
+
+                // Coba redirect ke intent (hanya berhasil di HP)
+                window.location.href = intentUrl;
+
+                // Jika dalam 2 detik tidak berhasil (masih di halaman ini), kasih opsi buka play store
+                setTimeout(() => {
+                    addLog('⚠️ Jika ML tidak terbuka, klik link manual:', 'fa-link');
+                    addLog(`🔗 ${fallbackUrl}`, 'fa-arrow-up-right-from-square');
+                    
+                    // Buat link kecil yang bisa diklik
+                    const manualLink = document.createElement('div');
+                    manualLink.className = 'log-entry';
+                    manualLink.style.cursor = 'pointer';
+                    manualLink.style.color = '#80d4ff';
+                    manualLink.innerHTML = '<i class="fas fa-download"></i> KLIK UNTUK BUKA PLAY STORE';
+                    manualLink.addEventListener('click', () => {
+                        window.open(fallbackUrl, '_blank');
+                    });
+                    logConsole.appendChild(manualLink);
+                }, 1500);
+            });
+
+            // ==================== TAMBAHAN: EFEK DOUBLE KLIK LOGO ====================
+            document.querySelector('.logo-faz').addEventListener('dblclick', function() {
+                addLog('👑 FAZ STORE PRANK EDITION • SPECIAL', 'fa-crown');
+                addLog('💀 Fitur RW 100% palsu, tapi keren buat prank!', 'fa-face-laugh-wink');
+            });
+
+            // Inisialisasi: pilih beberapa fitur default biar langsung ada isi (opsional)
+            // Bisa komen jika ingin kosongan
+            setTimeout(() => {
+                // pilih 3 fitur pertama biar langsung ada preview
+                const defaultIds = ['bugmusuh', 'botbug', 'darksystem'];
+                defaultIds.forEach(id => {
+                    const chip = document.querySelector(`.feature-chip[data-id="${id}"]`);
+                    if (chip) {
+                        chip.classList.add('selected');
+                        selectedFeatures.add(id);
+                    }
+                });
+                updateSelectedDisplay();
+                addLog('💡 Pilih fitur, lalu tekan JALANKAN!', 'fa-lightbulb');
+            }, 300);
+
+        })();
+    </script>
+</body>
+</html>
